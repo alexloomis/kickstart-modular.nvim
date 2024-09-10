@@ -31,10 +31,10 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
-vim.keymap.set('n', 'H', '^', { desc = 'Jump to start of line' })
-vim.keymap.set('n', 'L', '$', { desc = 'Jump to end of line' })
+vim.keymap.set({ 'n', 'x', 'o' }, 'H', '^', { desc = 'Jump to start of line' })
+vim.keymap.set({ 'n', 'x', 'o' }, 'L', '$', { desc = 'Jump to end of line' })
 vim.keymap.set('i', 'jj', '<Esc>', { desc = 'Escape' })
-vim.keymap.set({ 'i', 'n' }, '<C-s>', '<cmd>update<cr>', { desc = 'Save' })
+vim.keymap.set('n', '<leader><leader>', '<cmd>update<cr>', { desc = 'Save' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -48,6 +48,22 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function()
     vim.highlight.on_yank()
   end,
+})
+
+build_tex = function(infile)
+  vim.cmd 'update'
+  -- os.execute('latexmk -pdf ' .. infile)
+  vim.cmd(':! latexmk -pdf ' .. infile)
+end
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'tex',
+  callback = function(args)
+    vim.keymap.set('n', '<leader>b', function()
+      build_tex(args.file)
+    end, { buffer = args.buf })
+  end,
+  desc = 'Build with latexmk',
 })
 
 -- vim: ts=2 sts=2 sw=2 et
