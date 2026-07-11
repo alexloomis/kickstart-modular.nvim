@@ -66,4 +66,6 @@ vim.api.nvim_create_autocmd('FileType', {
   desc = '[B]uild with latexmk',
 })
 
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = '[E]rror float' })
+
 -- vim: ts=2 sts=2 sw=2 et
