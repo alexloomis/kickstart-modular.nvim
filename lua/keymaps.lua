@@ -59,11 +59,11 @@ end
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'tex',
   callback = function(args)
-    vim.keymap.set('n', '<leader>b', function()
+    vim.keymap.set('n', '<leader>B', function()
       build_tex(args.file)
     end, { buffer = args.buf })
   end,
-  desc = 'Build with latexmk',
+  desc = '[B]uild with latexmk',
 })
 
 -- vim: ts=2 sts=2 sw=2 et
