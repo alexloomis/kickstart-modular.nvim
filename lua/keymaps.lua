@@ -95,5 +95,6 @@ vim.api.nvim_create_autocmd('FileType', {
 
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = '[e]rror float' })
 vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { desc = '[r]e[n]ame' })
+vim.keymap.set('n', 'gd', function() require("telescope.builtin").lsp_definitions() end, { desc = "[g]o to [d]efinition" })
 
 -- vim: ts=2 sts=2 sw=2 et
