@@ -11,8 +11,8 @@ require('luasnip').setup {}
 --    See the README about individual language/framework/plugin snippets:
 --    https://github.com/rafamadriz/friendly-snippets
 --
--- vim.pack.add { gh 'rafamadriz/friendly-snippets' }
--- require('luasnip.loaders.from_vscode').lazy_load()
+vim.pack.add { gh 'rafamadriz/friendly-snippets' }
+require('luasnip.loaders.from_vscode').lazy_load()
 
 -- [[ Autocomplete Engine ]]
 vim.pack.add { { src = gh 'saghen/blink.cmp', version = vim.version.range '1.*' } }
@@ -40,7 +40,8 @@ require('blink.cmp').setup {
     --
     -- See `:help blink-cmp-config-keymap` for defining your own keymap
     preset = 'enter',
-
+    ['<Tab>'] = { 'select_next', 'snippet_forward', 'fallback' },
+    ['<S-Tab>'] = { 'select_prev', 'snippet_backward', 'fallback' },
     -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
     --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
   },
@@ -54,11 +55,25 @@ require('blink.cmp').setup {
   completion = {
     -- By default, you may press `<c-space>` to show the documentation.
     -- Optionally, set `auto_show = true` to show the documentation after a delay.
-    documentation = { auto_show = false, auto_show_delay_ms = 500 },
+    documentation = { auto_show = true, auto_show_delay_ms = 500 },
   },
 
   sources = {
     default = { 'lsp', 'path', 'snippets' },
+  },
+
+  cmdline = {
+    keymap = { preset = 'inherit' },
+    completion = {
+      menu = {
+        auto_show = function(ctx)
+          if vim.fn.getcmdtype() ~= ':' then return false end
+          -- only auto-show once there's a space after the command
+          -- (so ":q", ":w", ":wq" etc. don't trigger a popup)
+          return vim.fn.getcmdline():find ' ' ~= nil
+        end,
+      },
+    },
   },
 
   snippets = { preset = 'luasnip' },
